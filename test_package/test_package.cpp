@@ -1,7 +1,8 @@
 #include <iostream>
+#include <ffms.h>
 
 int main()
 {
-    std::cout << "Bincrafters\n";
-    return 0;
+    FFMS_Init(0, 0);
+    FFMS_Deinit();
 }
