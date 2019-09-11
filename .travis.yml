@@ -1,6 +1,7 @@
 env:
     global:
       - CONAN_REMOTES: https://api.bintray.com/conan/bincrafters/public-conan,https://api.bintray.com/conan/charliejiang/conan,https://api.bintray.com/conan/conan/conan-center
+      - CONAN_ARCHS: x86_64
 
 linux: &linux
    os: linux
