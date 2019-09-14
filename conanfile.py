@@ -24,8 +24,8 @@ class FFms2CoreConan(ConanFile):
 
     # Options may need to change depending on the packaged library.
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True], "fPIC": [True, False]}
-    default_options = {"shared": True, "fPIC": True}
+    options = {"fPIC": [True, False]}
+    default_options = {"fPIC": True}
 
     # Custom attributes for Bincrafters recipe conventions
     _source_subfolder = "source_subfolder"
@@ -113,10 +113,7 @@ class FFms2CoreConan(ConanFile):
             env_build.fpic = self.options.fPIC
 
         configure_args = ['--prefix=%s' % prefix]
-        if self.options.shared:
-            configure_args.extend(['--disable-static', '--enable-shared'])
-        else:
-            configure_args.extend(['--enable-static', '--disable-shared'])
+        configure_args.extend(['--enable-static', '--disable-shared'])
 
         env_vars = {
             "FFMPEG_LIBS": "-L%s" % self.deps_cpp_info["ffmpeg"].lib_paths[0],
