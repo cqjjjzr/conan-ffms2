@@ -1,7 +1,8 @@
-from conans import ConanFile, CMake, tools
+from conans import ConanFile, CMake, tools, AutoToolsBuildEnvironment
 from conans.tools import os_info, SystemPackageTool
 import os
 import shutil
+import glob
 
 class FFms2CoreConan(ConanFile):
     name = "ffms2-core"
@@ -90,6 +91,9 @@ class FFms2CoreConan(ConanFile):
 
         shutil.copy("CMakeLists.txt", os.path.join(
             self._source_subfolder, "CMakeLists.txt"))
+        tools.replace_in_file(os.path.join(self._source_subfolder, "configure.ac"), "AC_CONFIG_HEADERS([src/config/config.h])", "")
+        tools.replace_in_file(os.path.join(self._source_subfolder, "Makefile.am"), "	@ZLIB_CPPFLAGS@ \\", "	@ZLIB_CPPFLAGS@")
+        tools.replace_in_file(os.path.join(self._source_subfolder, "Makefile.am"), "	-include config.h", "")
 
     def _build_autotools(self):
         prefix = os.path.abspath(self.package_folder)
@@ -114,7 +118,10 @@ class FFms2CoreConan(ConanFile):
         else:
             configure_args.extend(['--enable-static', '--disable-shared'])
 
-        env_vars = {}
+        env_vars = {
+            "FFMPEG_LIBS": "-L%s" % self.deps_cpp_info["ffmpeg"].lib_paths[0],
+            "FFMPEG_CFLAGS": "-I%s" % self.deps_cpp_info["ffmpeg"].include_paths[0]
+        }
 
         with tools.chdir(self._source_subfolder):
             with tools.environment_append(env_vars):
