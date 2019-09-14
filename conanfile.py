@@ -94,6 +94,7 @@ class FFms2CoreConan(ConanFile):
         tools.replace_in_file(os.path.join(self._source_subfolder, "configure.ac"), "AC_CONFIG_HEADERS([src/config/config.h])", "")
         tools.replace_in_file(os.path.join(self._source_subfolder, "Makefile.am"), "	@ZLIB_CPPFLAGS@ \\", "	@ZLIB_CPPFLAGS@")
         tools.replace_in_file(os.path.join(self._source_subfolder, "Makefile.am"), "	-include config.h", "")
+        tools.replace_in_file(os.path.join(self._source_subfolder, "src", "core", "track.cpp"), "#include <cmath>", "#include <cmath>\n#include <cstdlib>")
 
     def _build_autotools(self):
         prefix = os.path.abspath(self.package_folder)
